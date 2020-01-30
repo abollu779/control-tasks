@@ -293,8 +293,11 @@ def setup_new_experiment_dir(args, yaml_args, reuse_results_path, embeddings_pat
     reuse_results_path: the (optional) path to reuse from a previous run.
   """
   now = datetime.now()
-  date_suffix = '-'.join((str(x) for x in [now.year, now.month, now.day, now.hour, now.minute, now.second, now.microsecond]))
-  model_suffix = '-'.join((yaml_args['model']['model_type'], yaml_args['probe']['task_name']))
+  # date_suffix = '-'.join((str(x) for x in [now.year, now.month, now.day, now.hour, now.minute, now.second, now.microsecond]))
+  # model_suffix = '-'.join((yaml_args['model']['model_type'], yaml_args['probe']['task_name']))
+  task_type = 'linguistic' if (yaml_args['probe']['misc']['corrupted_token_percent'] == 0.0) else 'control'
+  task_suffix = '%s_%d' % (task_type, args.seed)
+
   if reuse_results_path:
     new_root = reuse_results_path
     tqdm.write('Reusing old results directory at {}'.format(new_root))
@@ -306,7 +309,7 @@ def setup_new_experiment_dir(args, yaml_args, reuse_results_path, embeddings_pat
     new_root = os.path.join(yaml_args['reporting']['root'], yaml_args['reporting']['fixed_directory'])
     tqdm.write('Constructing new results directory at {}'.format(new_root))
   else:
-    new_root = os.path.join(yaml_args['reporting']['root'], model_suffix + '-' + date_suffix +'/' )
+    new_root = os.path.join(yaml_args['reporting']['root'], 'results/' + task_suffix + '/')
     tqdm.write('Constructing new results directory at {}'.format(new_root))
   if embeddings_path:
     yaml_args['dataset']['embeddings']['root'] = embeddings_path
