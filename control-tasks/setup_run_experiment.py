@@ -41,8 +41,7 @@ if __name__ == "__main__":
         run_current_experiment('control', control_config, seed=i)
 
     # Plot histogram with linguistic accuracy bin highlighted in red
-    accuracies, counts = zip(*Counter(all_accs).items())
-    nums, bins, patches = plt.hist(accuracies, bins=np.arange(0, 1.01, 0.01), color='g')
+    nums, bins, patches = plt.hist(all_accs, bins=np.arange(0, 1.01, 0.01), color='g')
     linguistic_idx = np.where(bins == linguistic_acc)[0][0]
     patches[linguistic_idx].set_fc('r')
     plt.savefig('results/histogram.png')
