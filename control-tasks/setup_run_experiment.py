@@ -4,8 +4,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
-linguistic_config = "example/config/en_ewt-pos-corrupted0-rank1000-0hid-ELMo1.yaml"
-control_config = "example/config/en_ewt-pos-corrupted1-rank1000-0hid-ELMo1.yaml"
+linguistic_linear_config = "example/config/en_ewt-pos-corrupted0-rank1000-0hid-ELMo1.yaml"
+control_linear_config = "example/config/en_ewt-pos-corrupted1-rank1000-0hid-ELMo1.yaml"
+linguistic_mlp_config = "example/config/en_ewt-pos-corrupted0-rank1000-1hid-ELMo1.yaml"
+control_mlp_config = "example/config/en_ewt-pos-corrupted1-rank1000-1hid-ELMo1.yaml"
 
 all_accs = []
 
@@ -31,9 +33,19 @@ def run_current_experiment(task_type, config, seed=0):
 
 if __name__ == "__main__":
     argp = ArgumentParser()
+    argp.add_argument('--num-probe-layers', type=int, choices=[0, 1],
+        help='specify desired probe complexity')
     argp.add_argument('--num-tests', type=int,
       help='total number of tests to be run')
     cli_args = argp.parse_args()
+
+    if cli_args.num_probe_layers == 0:
+        linguistic_config = linguistic_linear_config
+        control_config = control_linear_config
+    else:
+        assert cli_args.num_probe_layers == 1
+        linguistic_config = linguistic_mlp_config
+        control_config = control_mlp_config
 
     # Run linguistic test and all control tests
     linguistic_acc = run_current_experiment('linguistic', linguistic_config)
