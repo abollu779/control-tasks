@@ -37,10 +37,13 @@ if __name__ == "__main__":
 
     # Run linguistic test and all control tests
     linguistic_acc = run_current_experiment('linguistic', linguistic_config)
+    accs = [linguistic_acc]
     for i in range(cli_args.num_tests-1):
-        run_current_experiment('control', control_config, seed=i)
+        curr_control_acc = run_current_experiment('control', control_config, seed=i)
+        accs.append(curr_control_acc)
 
     # Plot histogram with linguistic accuracy bin highlighted in red
+    print("Recorded Accuracies:\n", accs)
     nums, bins, patches = plt.hist(all_accs, bins=np.arange(0, 1.01, 0.01), color='g')
     linguistic_idx = np.where(bins == linguistic_acc)[0][0]
     patches[linguistic_idx].set_fc('r')
