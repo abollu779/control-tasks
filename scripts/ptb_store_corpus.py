@@ -27,6 +27,6 @@ def write_dataset_to_file(out_file, split='train'):
             out_fp.write('\n')
 
 if __name__=="__main__":
-    write_dataset_to_file('example/data/ptb_nltk/ptb_train.txt', 'train')
-    write_dataset_to_file('example/data/ptb_nltk/ptb_dev.txt', 'dev')
-    write_dataset_to_file('example/data/ptb_nltk/ptb_test.txt', 'test')
+    write_dataset_to_file('example/data/ptb_nltk/ptb_train.conllu', 'train')
+    write_dataset_to_file('example/data/ptb_nltk/ptb_dev.conllu', 'dev')
+    write_dataset_to_file('example/data/ptb_nltk/ptb_test.conllu', 'test')

@@ -11,10 +11,10 @@ dataset:
     test_path: ptb_test.txt
   embeddings:
     type: token #{token,subword}
-    root: example/data/en_ewt-ud-sample/ 
-    train_path: en_ewt-ud-train.elmo-layers.hdf5
-    dev_path: en_ewt-ud-dev.elmo-layers.hdf5
-    test_path: en_ewt-ud-test.elmo-layers.hdf5
+    root: example/data/ptb_nltk/ 
+    train_path: ptb_train.elmo-layers.hdf5
+    dev_path: ptb_dev.elmo-layers.hdf5
+    test_path: ptb_test.elmo-layers.hdf5
   batch_size: 20
   dataset_size: 40000
 model:

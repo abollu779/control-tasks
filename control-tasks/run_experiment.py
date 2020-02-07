@@ -10,7 +10,7 @@ import torch
 import random
 import numpy as np
 
-import ptb_data as data # data
+import data # ptb_data as data
 import model
 import probe
 import regimen
