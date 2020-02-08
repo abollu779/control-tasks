@@ -6,9 +6,9 @@ dataset:
      - embeddings
   corpus:
     root: example/data/ptb_nltk/
-    train_path: ptb_train.txt
-    dev_path: ptb_dev.txt
-    test_path: ptb_test.txt
+    train_path: ptb_train.conllu
+    dev_path: ptb_dev.conllu
+    test_path: ptb_test.conllu
   embeddings:
     type: token #{token,subword}
     root: example/data/ptb_nltk/ 
@@ -32,6 +32,7 @@ probe:
   hidden_layers: 0
   dropout: 0
   params_path: predictor.params
+  label_space_size: 46
   misc:
     corrupted_token_percent: 0.0
 probe_training:

@@ -633,6 +633,7 @@ class CorruptedPartOfSpeechLabelTask(PartOfSpeechLabelTask):
     self.rand_type_vocab = {}
     self.dist = PTB_TRAIN_EMPIRICAL_POS_DISTRIBUTION
     self.target_corrupted_token_percent = args['probe']['misc']['corrupted_token_percent']
+    self.label_space_size = 45 if 'label_space_size' not in args['probe'] else args['probe']['label_space_size']
     np.random.seed(args['seed'])
 
   def prepare(self, train_obs, dev_obs, test_obs):
@@ -668,8 +669,11 @@ class CorruptedPartOfSpeechLabelTask(PartOfSpeechLabelTask):
 
   def _register_type(self, string):
     if string not in self.rand_type_vocab:
-      ints = list(range(45))
-      self.rand_type_vocab[string] = int(np.random.choice(ints, p=self.dist))
+      ints = list(range(self.label_space_size))
+      # TODO: Capture the label distribution in the nltk PTB data and use that
+      # to sample each word's label below
+      # self.rand_type_vocab[string] = int(np.random.choice(ints, p=self.dist))
+      self.rand_type_vocab[string] = int(np.random.choice(ints))
     return self.rand_type_vocab[string]
 
   def labels(self, observation):
@@ -679,7 +683,7 @@ class CorruptedPartOfSpeechLabelTask(PartOfSpeechLabelTask):
         labels[index] = self.rand_type_vocab[string]
       #if random.random() < 0.2:
       #  labels[index] = self._register_type(string)
-    self.args['probe']['label_space_size'] = 45
+    self.args['probe']['label_space_size'] = self.label_space_size
     return labels
 
 class RandomPrefixLabelTask(Task):

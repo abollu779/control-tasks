@@ -3,6 +3,16 @@ import nltk
 # nltk.download('treebank')
 from nltk.corpus import treebank
 
+"""
+Run this script to store the Penn Treebank sentences in a raw .txt file and 
+the formatted tagged sentences in a .conllu file.
+
+In order to generate ELMo embeddings, make sure you have allennlp installed and 
+run the following from the command line when in the root directory:
+$ allennlp elmo --all example/data/ptb_nltk/ptb_train.txt example/data/ptb_nltk/ptb_train.elmo-layers.hdf5 --cuda-device 0
+$ allennlp elmo --all example/data/ptb_nltk/ptb_dev.txt example/data/ptb_nltk/ptb_dev.elmo-layers.hdf5 --cuda-device 0
+$ allennlp elmo --all example/data/ptb_nltk/ptb_test.txt example/data/ptb_nltk/ptb_test.elmo-layers.hdf5 --cuda-device 0
+"""
 train_startidx, dev_startidx, test_startidx = 0, 150, 180
 
 def write_dataset_to_file(out_conll_file, out_txt_file, split='train'):
