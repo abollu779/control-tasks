@@ -4,7 +4,6 @@ from error_analysis import load_observations, vocab, inv_vocab
 import torch
 from argparse import ArgumentParser
 import numpy as np
-from tqdm import tqdm
 
 if __name__ == '__main__':
   argp = ArgumentParser()
@@ -16,8 +15,8 @@ if __name__ == '__main__':
 
   
   confusion_matrix = torch.zeros((45,45))
-  for filepath in tqdm(args.filepaths):
-    tqdm.write('reading\n' + str( filepath))
+  for filepath in args.filepaths:
+    print('reading\n' + str( filepath))
     observations = iter(load_observations(args.conllx_filepath))
     predictions = json.load(open(filepath))
     for prediction_batch in predictions:

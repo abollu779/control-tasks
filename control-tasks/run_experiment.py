@@ -5,7 +5,6 @@ import random
 from datetime import datetime
 import shutil
 import yaml
-from tqdm import tqdm
 import torch
 import random
 import numpy as np
@@ -300,17 +299,17 @@ def setup_new_experiment_dir(args, yaml_args, reuse_results_path, embeddings_pat
 
   if reuse_results_path:
     new_root = reuse_results_path
-    tqdm.write('Reusing old results directory at {}'.format(new_root))
+    print('Reusing old results directory at {}'.format(new_root))
     if args.train_probe == -1:
       args.train_probe = 0
-      tqdm.write('Setting train_probe to 0 to avoid squashing old params; '
+      print('Setting train_probe to 0 to avoid squashing old params; '
           'explicitly set to 1 to override.')
   elif 'fixed_directory' in yaml_args['reporting']:
     new_root = os.path.join(yaml_args['reporting']['root'], yaml_args['reporting']['fixed_directory'])
-    tqdm.write('Constructing new results directory at {}'.format(new_root))
+    print('Constructing new results directory at {}'.format(new_root))
   else:
     new_root = os.path.join(yaml_args['reporting']['root'], 'results/' + task_suffix + '/')
-    tqdm.write('Constructing new results directory at {}'.format(new_root))
+    print('Constructing new results directory at {}'.format(new_root))
   if embeddings_path:
     yaml_args['dataset']['embeddings']['root'] = embeddings_path
     print('New embeddings path: {}'.format(embeddings_path))
@@ -321,7 +320,7 @@ def setup_new_experiment_dir(args, yaml_args, reuse_results_path, embeddings_pat
     shutil.copyfile(args.experiment_config, os.path.join(yaml_args['reporting']['root'],
       os.path.basename(args.experiment_config)))
   except shutil.SameFileError:
-    tqdm.write('Note, the config being used is the same as that already present in the results dir')
+    print('Note, the config being used is the same as that already present in the results dir')
 
 
 if __name__ == '__main__':

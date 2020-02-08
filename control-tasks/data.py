@@ -10,7 +10,6 @@ import random
 
 from torch.utils.data import DataLoader, Dataset
 import numpy as np
-from tqdm import tqdm
 import torch
 import torch.nn as nn
 import h5py
@@ -57,7 +56,7 @@ class SimpleDataset:
     if 'dataset_size' in self.args['dataset'] and self.args['dataset']['dataset_size'] < len(train_obs):
       subset_size = self.args['dataset']['dataset_size']
       train_obs = random.sample(train_obs, subset_size)
-    tqdm.write('Retaining {} training observations'.format(len(train_obs)))
+    print('Retaining {} training observations'.format(len(train_obs)))
     return train_obs
 
   def read_from_disk(self):
@@ -410,7 +409,7 @@ class BERTDataset(SubwordDataset):
     hf = h5py.File(filepath, 'r')
     indices = list(hf.keys())
     single_layer_features_list = []
-    for index in tqdm(sorted([int(x) for x in indices]), desc='[aligning embeddings]'):
+    for index in sorted([int(x) for x in indices]):
       observation = observations[index]
       feature_stack = hf[str(index)]
       single_layer_features = feature_stack[elmo_layer]
@@ -450,7 +449,7 @@ class ObservationIterator(Dataset):
       task: a Task object which takes Observations and constructs labels.
     """
     self.labels = []
-    for observation in tqdm(observations, desc='[computing labels]'):
+    for observation in observations:
       self.labels.append(task.labels(observation))
 
   def __len__(self):

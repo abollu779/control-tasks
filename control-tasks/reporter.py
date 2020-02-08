@@ -3,7 +3,6 @@
 from collections import defaultdict
 import os
 
-from tqdm import tqdm
 from scipy.stats import spearmanr, pearsonr
 #from scipy.special import softmax
 import numpy as np 
@@ -44,14 +43,14 @@ class Reporter:
     for method in self.reporting_methods:
       if method in self.reporting_method_dict:
         if split_name == 'test' and method not in self.test_reporting_constraint:
-          tqdm.write("Reporting method {} not in test set reporting "
+          print("Reporting method {} not in test set reporting "
               "methods (reporter.py); skipping".format(method))
           continue
-        tqdm.write("Reporting {} on split {}".format(method, split_name))
+        print("Reporting {} on split {}".format(method, split_name))
         self.reporting_method_dict[method](prediction_batches
             , dataloader, split_name)
       else:
-        tqdm.write('[WARNING] Reporting method not known: {}; skipping'.format(method))
+        print('[WARNING] Reporting method not known: {}; skipping'.format(method))
 
   def write_json(self, prediction_batches, dataset, split_name):
     """Writes observations and predictions to disk.
@@ -187,8 +186,8 @@ class WordPairReporter(Reporter):
     uspan_total = 0
     uspan_correct = 0
     total_sents = 0
-    for prediction_batch, (data_batch, label_batch, length_batch, observation_batch) in tqdm(zip(
-        prediction_batches, dataset), desc='[uuas,tikz]'):
+    for prediction_batch, (data_batch, label_batch, length_batch, observation_batch) in zip(
+        prediction_batches, dataset):
       for prediction, label, length, (observation, _) in zip(
           prediction_batch, label_batch,
           length_batch, observation_batch):
@@ -470,8 +469,8 @@ class WordPairLabelReporter(WordPairReporter):
     uspan_total = 0
     uspan_correct = 0
     total_sents = 0
-    for prediction_batch, (data_batch, label_batch, length_batch, observation_batch) in tqdm(zip(
-        prediction_batches, dataset), desc='[uuas,tikz]'):
+    for prediction_batch, (data_batch, label_batch, length_batch, observation_batch) in zip(
+        prediction_batches, dataset):
       for prediction, label, length, (observation, _) in zip(
           prediction_batch, label_batch,
           length_batch, observation_batch):
@@ -516,8 +515,8 @@ class WordPairLabelReporter(WordPairReporter):
     uspan_total = 0
     uspan_correct = 0
     total_sents = 0
-    for prediction_batch, (data_batch, label_batch, length_batch, observation_batch) in tqdm(zip(
-        prediction_batches, dataset), desc='[uuas,tikz]'):
+    for prediction_batch, (data_batch, label_batch, length_batch, observation_batch) in zip(
+        prediction_batches, dataset):
       for prediction, label, length, (observation, _) in zip(
           prediction_batch, label_batch,
           length_batch, observation_batch):

@@ -2,13 +2,12 @@
 
 import torch
 import torch.nn as nn
-from tqdm import tqdm
 
 class CrossEntropyLoss(nn.Module):
   """Custom cross-entropy loss"""
   def __init__(self, args):
     super(CrossEntropyLoss, self).__init__()
-    tqdm.write('Constructing CrossEntropyLoss')
+    print('Constructing CrossEntropyLoss')
     self.args = args
     self.pytorch_ce_loss = torch.nn.CrossEntropyLoss(ignore_index=-1, reduction='sum')
 
@@ -42,7 +41,7 @@ class L1DistanceLoss(nn.Module):
   """Custom L1 loss for distance matrices."""
   def __init__(self, args):
     super(L1DistanceLoss, self).__init__()
-    tqdm.write('Constructing L1DistanceLoss')
+    print('Constructing L1DistanceLoss')
     self.args = args
     self.word_pair_dims = (1,2)
 
@@ -81,7 +80,7 @@ class L1DepthLoss(nn.Module):
   """Custom L1 loss for depth sequences."""
   def __init__(self, args):
     super(L1DepthLoss, self).__init__()
-    tqdm.write('Constructing L1DepthLoss')
+    print('Constructing L1DepthLoss')
     self.args = args
     self.word_dim = 1
 

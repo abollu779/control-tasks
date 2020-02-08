@@ -4,7 +4,6 @@ import sys
 
 from torch import optim
 import torch
-from tqdm import tqdm
 
 class ProbeRegimen:
   """Basic regimen for training and running inference on probes.
@@ -64,12 +63,12 @@ class ProbeRegimen:
     eval_dev_every = self.dev_eval_gradient_steps if self.dev_eval_gradient_steps != -1 else (len(train_dataset))
     eval_index = 0
     min_dev_loss_eval_index = -1
-    for epoch_index in tqdm(range(self.max_epochs), desc='[training]'):
+    for epoch_index in range(self.max_epochs):
       epoch_train_loss = 0
       epoch_train_epoch_count = 0
       epoch_dev_epoch_count = 0
       epoch_train_loss_count = 0
-      for batch in tqdm(train_dataset, desc='[training batch]'):
+      for batch in train_dataset:
         probe.train()
         self.optimizer.zero_grad()
         observation_batch, label_batch, length_batch, _ = batch
@@ -85,11 +84,11 @@ class ProbeRegimen:
         if gradient_steps % eval_dev_every == 0:
           eval_index += 1
           if gradient_steps >= self.max_gradient_steps:
-            tqdm.write('Hit max gradient steps; stopping')
+            print('Hit max gradient steps; stopping')
             return
           epoch_dev_loss = 0
           epoch_dev_loss_count = 0
-          for batch in tqdm(dev_dataset, desc='[dev batch]'):
+          for batch in dev_dataset:
             self.optimizer.zero_grad()
             probe.eval()
             observation_batch, label_batch, length_batch, _ = batch
@@ -100,16 +99,16 @@ class ProbeRegimen:
             epoch_dev_loss_count += count.detach().cpu().numpy()
             epoch_dev_epoch_count += 1
           self.scheduler.step(epoch_dev_loss)
-          tqdm.write('[epoch {}] Train loss: {}, Dev loss: {}'.format(epoch_index,
+          print('[epoch {}] Train loss: {}, Dev loss: {}'.format(epoch_index,
               epoch_train_loss/epoch_train_loss_count, epoch_dev_loss/epoch_dev_loss_count))
           if epoch_dev_loss / epoch_dev_loss_count < min_dev_loss - 0.001:
             torch.save(probe.state_dict(), self.params_path)
             min_dev_loss = epoch_dev_loss / epoch_dev_loss_count
             min_dev_loss_epoch = epoch_index
             min_dev_loss_eval_index = eval_index
-            tqdm.write('Saving probe parameters')
+            print('Saving probe parameters')
           elif min_dev_loss_eval_index < eval_index - 4:
-            tqdm.write('Early stopping')
+            print('Early stopping')
             return
 
   def predict(self, probe, model, dataset):
@@ -125,7 +124,7 @@ class ProbeRegimen:
     """
     probe.eval()
     predictions_by_batch = []
-    for batch in tqdm(dataset, desc='[predicting]'):
+    for batch in dataset:
       observation_batch, label_batch, length_batch, _ = batch
       word_representations = model(observation_batch)
       predictions = probe(word_representations)

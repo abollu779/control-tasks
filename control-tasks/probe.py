@@ -3,7 +3,6 @@
 import torch.nn as nn
 import torch
 import numpy
-from tqdm import tqdm
 
 class Probe(nn.Module):
 
@@ -11,7 +10,7 @@ class Probe(nn.Module):
     total_params = 0
     for param in self.parameters():
       total_params += numpy.prod(param.size())
-    tqdm.write('Probe has {} parameters'.format(total_params))
+    print('Probe has {} parameters'.format(total_params))
 
 class TwoWordPSDProbe(Probe):
   """ Computes squared L2 distance after projection by a matrix.
