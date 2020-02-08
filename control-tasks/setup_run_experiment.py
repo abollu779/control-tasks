@@ -4,22 +4,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
-###########
-# CONFIGS #
-###########
-
-# Linear EWT Config
-linguistic_linear_config = "example/config/en_ewt-pos-corrupted0-rank1000-0hid-ELMo1.yaml"
-control_linear_config = "example/config/en_ewt-pos-corrupted1-rank1000-0hid-ELMo1.yaml"
-
-# MLP EWT Config
-linguistic_mlp_config = "example/config/en_ewt-pos-corrupted0-rank1000-1hid-ELMo1.yaml"
-control_mlp_config = "example/config/en_ewt-pos-corrupted1-rank1000-1hid-ELMo1.yaml"
-
-# Linear PTB Config
-linguistic_ptb_config = "example/config/ptb-pos-corrupted0-rank1000-0hid-ELMo1.yaml"
-control_ptb_config = "example/config/ptb-pos-corrupted1-rank1000-0hid-ELMo1.yaml"
-
 all_accs = []
 
 def run_current_experiment(task_type, config, seed=0):
@@ -44,7 +28,7 @@ def run_current_experiment(task_type, config, seed=0):
 
 if __name__ == "__main__":
     argp = ArgumentParser()
-    argp.add_argument('--dataset', choices=['ewt', 'ptb'],
+    argp.add_argument('--dataset', choices=['en_ewt', 'ptb'],
         help='choose which dataset to use')
     argp.add_argument('--num-probe-layers', type=int, choices=[0, 1],
         help='specify desired probe complexity')
@@ -52,21 +36,8 @@ if __name__ == "__main__":
       help='total number of tests to be run')
     cli_args = argp.parse_args()
 
-    linguistic_config = ''
-    control_config = ''
-
-    if cli_args.dataset == 'ptb':
-        linguistic_config = linguistic_ptb_config
-        control_config = control_ptb_config
-    else:
-        assert cli_args.dataset == 'ewt'
-        if cli_args.num_probe_layers == 0:
-            linguistic_config = linguistic_linear_config
-            control_config = control_linear_config
-        else:
-            assert cli_args.num_probe_layers == 1
-            linguistic_config = linguistic_mlp_config
-            control_config = control_mlp_config
+    linguistic_config = "example/config/%s-pos-corrupted0-rank1000-%dhid-ELMo1.yaml" % (cli_args.dataset, cli_args.num_probe_layers)
+    control_config = "example/config/%s-pos-corrupted1-rank1000-%dhid-ELMo1.yaml" % (cli_args.dataset, cli_args.num_probe_layers)
 
     # Run linguistic test and all control tests
     linguistic_acc = run_current_experiment('linguistic', linguistic_config)
