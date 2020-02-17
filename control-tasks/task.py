@@ -676,10 +676,10 @@ class CorruptedPartOfSpeechLabelTask(PartOfSpeechLabelTask):
       self.rand_type_vocab[string] = int(np.random.choice(ints))
     return self.rand_type_vocab[string]
 
-  def labels(self, observation):
+  def labels(self, observation, train):
     labels = super(CorruptedPartOfSpeechLabelTask, self).labels(observation)
     for index, string in enumerate(observation.sentence):
-      if string in self.rand_type_vocab:
+      if train and string in self.rand_type_vocab:
         labels[index] = self.rand_type_vocab[string]
       #if random.random() < 0.2:
       #  labels[index] = self._register_type(string)

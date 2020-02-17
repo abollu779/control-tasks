@@ -439,9 +439,9 @@ class ObservationIterator(Dataset):
 
   def __init__(self, observations, task, train=False):
     self.observations = observations
-    self.set_labels(observations, task)
+    self.set_labels(observations, task, train)
 
-  def set_labels(self, observations, task):
+  def set_labels(self, observations, task, train):
     """ Constructs aand stores label for each observation.
 
     Args:
@@ -450,7 +450,7 @@ class ObservationIterator(Dataset):
     """
     self.labels = []
     for observation in observations:
-      self.labels.append(task.labels(observation))
+      self.labels.append(task.labels(observation, train))
 
   def __len__(self):
     return len(self.observations)
