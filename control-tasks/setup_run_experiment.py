@@ -48,6 +48,8 @@ if __name__ == "__main__":
 
     # Plot histogram with linguistic accuracy bin highlighted in red
     print("Recorded Accuracies:\n", accs)
+    import pdb
+    pdb.set_trace()
     nums, bins, patches = plt.hist(all_accs, bins=np.arange(0, 1.01, 0.01), color='g')
     linguistic_idx = np.where(bins == linguistic_acc)[0][0]
     patches[linguistic_idx].set_fc('r')

@@ -32,7 +32,7 @@ class SimpleDataset:
     self.vocab = vocab
     self.observation_class = self.get_observation_class(self.args['dataset']['observation_fieldnames'])
     train_obs, dev_obs, test_obs = self.read_from_disk()
-    task.prepare(train_obs, dev_obs, test_obs)
+    # task.prepare(train_obs, dev_obs, test_obs)
 
     # Crucial note -- training data subsetting is performed _before_ the training subset is taken...
     # this is to maintain random-type statistics (in random tasks) between differing training sizes
@@ -439,9 +439,9 @@ class ObservationIterator(Dataset):
 
   def __init__(self, observations, task, train=False):
     self.observations = observations
-    self.set_labels(observations, task)
+    self.set_labels(observations, task, train)
 
-  def set_labels(self, observations, task):
+  def set_labels(self, observations, task, train):
     """ Constructs aand stores label for each observation.
 
     Args:
@@ -450,7 +450,7 @@ class ObservationIterator(Dataset):
     """
     self.labels = []
     for observation in observations:
-      self.labels.append(task.labels(observation))
+      self.labels.append(task.labels(observation, train))
 
   def __len__(self):
     return len(self.observations)

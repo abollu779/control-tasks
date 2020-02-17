@@ -635,6 +635,7 @@ class CorruptedPartOfSpeechLabelTask(PartOfSpeechLabelTask):
     self.target_corrupted_token_percent = args['probe']['misc']['corrupted_token_percent']
     self.label_space_size = 45 if 'label_space_size' not in args['probe'] else args['probe']['label_space_size']
     np.random.seed(args['seed'])
+    self.permuted_label_vocab = np.random.permutation(self.label_space_size)
 
   def prepare(self, train_obs, dev_obs, test_obs):
     """Chooses the word types to be part-of-speech-corrupted in all datasets.
@@ -676,11 +677,12 @@ class CorruptedPartOfSpeechLabelTask(PartOfSpeechLabelTask):
       self.rand_type_vocab[string] = int(np.random.choice(ints))
     return self.rand_type_vocab[string]
 
-  def labels(self, observation):
+  def labels(self, observation, train):
     labels = super(CorruptedPartOfSpeechLabelTask, self).labels(observation)
     for index, string in enumerate(observation.sentence):
-      if string in self.rand_type_vocab:
-        labels[index] = self.rand_type_vocab[string]
+      if train and self.target_corrupted_token_percent > 0:
+        original_label_id = int(labels[index])
+        labels[index] = int(self.permuted_label_vocab[original_label_id])
       #if random.random() < 0.2:
       #  labels[index] = self._register_type(string)
     self.args['probe']['label_space_size'] = self.label_space_size
