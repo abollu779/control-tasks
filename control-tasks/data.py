@@ -38,7 +38,7 @@ class SimpleDataset:
     # this is to maintain random-type statistics (in random tasks) between differing training sizes
     train_obs = self.train_data_subset(train_obs)
     self.train_dataset = ObservationIterator(train_obs, task, train=True)
-    self.dev_dataset = ObservationIterator(dev_obs, task)
+    self.dev_dataset = ObservationIterator(dev_obs, task, train=True)
     self.test_dataset = ObservationIterator(test_obs, task)
 
   def train_data_subset(self, train_obs):

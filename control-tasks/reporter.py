@@ -47,8 +47,7 @@ class Reporter:
               "methods (reporter.py); skipping".format(method))
           continue
         print("Reporting {} on split {}".format(method, split_name))
-        self.reporting_method_dict[method](prediction_batches
-            , dataloader, split_name)
+        self.reporting_method_dict[method](prediction_batches, dataloader, split_name)
       else:
         print('[WARNING] Reporting method not known: {}; skipping'.format(method))
 
@@ -243,7 +242,7 @@ class WordReporter(Reporter):
         'image_examples':self.report_image_examples,
         }
     self.reporting_root = args['reporting']['root']
-    self.test_reporting_constraint = {'spearmanr', 'uuas', 'root_acc'}
+    self.test_reporting_constraint = {'spearmanr', 'uuas', 'root_acc', 'label_accuracy'}
     self.dataset = dataset
 
   def report_spearmanr(self, prediction_batches, dataset, split_name):

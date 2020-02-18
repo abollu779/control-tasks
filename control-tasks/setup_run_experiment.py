@@ -14,7 +14,7 @@ def run_current_experiment(task_type, config, seed=0):
 
     # Extract current accuracy
     output_folder = 'results/%s_%d/' % (task_type, seed)
-    acc_path = os.path.join(output_folder, 'dev.label_acc')
+    acc_path = os.path.join(output_folder, 'test.label_acc')
 
     with open(acc_path) as acc_file:
         acc = float(acc_file.readline().strip()[:4]) # restrict to 2 decimal points

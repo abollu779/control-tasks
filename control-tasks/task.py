@@ -635,6 +635,9 @@ class CorruptedPartOfSpeechLabelTask(PartOfSpeechLabelTask):
     self.target_corrupted_token_percent = args['probe']['misc']['corrupted_token_percent']
     self.label_space_size = 45 if 'label_space_size' not in args['probe'] else args['probe']['label_space_size']
     np.random.seed(args['seed'])
+    if self.target_corrupted_token_percent > 0.1:
+      self.target_corrupted_token_percent = np.random.uniform(0, 1)
+    print("Corruption %: ", self.target_corrupted_token_percent)
 
   def prepare(self, train_obs, dev_obs, test_obs):
     """Chooses the word types to be part-of-speech-corrupted in all datasets.
